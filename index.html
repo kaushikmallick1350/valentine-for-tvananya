@@ -143,5 +143,73 @@
     });
   </script>
 
+  <script>
+  const yesBtn = document.getElementById("yesBtn");
+  const noBtn = document.getElementById("noBtn");
+  const card = document.querySelector(".card");
+  const audio = document.getElementById("loveAudio");
+
+  yesBtn.addEventListener("click", () => {
+    // disable buttons
+    yesBtn.style.display = "none";
+    noBtn.style.display = "none";
+
+    // fade out card
+    card.style.transition = "opacity 1s ease, transform 1s ease";
+    card.style.opacity = "0";
+    card.style.transform = "scale(0.95)";
+
+    // play music after interaction
+    audio.volume = 0.6;
+    audio.play();
+
+    // after fade, show romantic scene
+    setTimeout(() => {
+      document.body.innerHTML = `
+        <div style="
+          height:100vh;
+          display:flex;
+          flex-direction:column;
+          justify-content:center;
+          align-items:center;
+          background: radial-gradient(circle at top, #ffd1dc, #ff8fab);
+          color:#fff;
+          text-align:center;
+          animation: fadeIn 2s ease;
+          font-family: 'Poppins', system-ui, sans-serif;
+        ">
+          <div style="font-size:80px; animation: pulse 1.5s infinite;">❤️</div>
+          <div style="font-size:22px; margin-top:20px; opacity:0; animation: appear 2s ease forwards 1s;">
+            Yayyy… 💕
+          </div>
+          <div style="font-size:18px; margin-top:12px; opacity:0; animation: appear 2s ease forwards 2.5s;">
+            Some moments don’t need to be explained.
+          </div>
+          <div style="font-size:18px; margin-top:8px; opacity:0; animation: appear 2s ease forwards 4s;">
+            This is one of them.
+          </div>
+          <div style="font-size:20px; margin-top:30px; opacity:0; animation: appear 2s ease forwards 5.5s;">
+            Tvananya ❤️
+          </div>
+        </div>
+
+        <style>
+          @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+          }
+          @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+          }
+          @keyframes appear {
+            to { opacity: 1; }
+          }
+        </style>
+      `;
+    }, 1200);
+  });
+</script>
+
 </body>
 </html>
