@@ -108,53 +108,6 @@
 <audio id="cheer" src="https://assets.mixkit.co/sfx/preview/mixkit-small-crowd-cheer-364.mp3"></audio>
 
 <script>
-/* ---------------- CONFETTI (CARD ORIGIN) ---------------- */
-const canvas = document.getElementById("confetti");
-const ctx = canvas.getContext("2d");
-
-function resize() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-resize();
-window.addEventListener("resize", resize);
-
-const particles = [];
-const colors = ["#ff3b6f", "#ff85a1", "#ffd6e0"];
-
-function burstFromCard() {
-  const card = document.getElementById("card").getBoundingClientRect();
-
-  for (let i = 0; i < 140; i++) {
-    particles.push({
-      x: card.left + card.width / 2,
-      y: card.top + card.height / 2,
-      vx: (Math.random() - 0.5) * 8,
-      vy: Math.random() * -8 - 2,
-      size: Math.random() * 6 + 4,
-      color: colors[Math.floor(Math.random() * colors.length)],
-      life: 1
-    });
-  }
-  animate();
-}
-
-function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  particles.forEach(p => {
-    ctx.globalAlpha = p.life;
-    ctx.fillStyle = p.color;
-    ctx.fillRect(p.x, p.y, p.size, p.size);
-    p.x += p.vx;
-    p.y += p.vy;
-    p.vy += 0.25;
-    p.life -= 0.015;
-  });
-  if (particles.some(p => p.life > 0)) requestAnimationFrame(animate);
-}
-
-
-<script>
 /* ---------------- CINEMATIC CONFETTI ---------------- */
 const canvas = document.getElementById("confetti");
 const ctx = canvas.getContext("2d");
@@ -247,8 +200,6 @@ function startConfetti() {
     if (bursts > 10) clearInterval(bgInterval);
   }, 500);
 }
-</script>
-
 
 /* ---------------- BUTTON LOGIC ---------------- */
 const noBtn = document.getElementById("noBtn");
