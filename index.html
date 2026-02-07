@@ -153,6 +153,103 @@ function animate() {
   if (particles.some(p => p.life > 0)) requestAnimationFrame(animate);
 }
 
+
+<script>
+/* ---------------- CINEMATIC CONFETTI ---------------- */
+const canvas = document.getElementById("confetti");
+const ctx = canvas.getContext("2d");
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener("resize", resize);
+
+const particles = [];
+const colors = ["#ff3b6f", "#ff85a1", "#ffd6e0", "#ffffff"];
+
+function createParticle(x, y, power = 1) {
+  return {
+    x,
+    y,
+    vx: (Math.random() - 0.5) * 14 * power,
+    vy: (Math.random() - 1.2) * 14 * power,
+    size: Math.random() * 6 + 4,
+    color: colors[Math.floor(Math.random() * colors.length)],
+    life: 1,
+    rotation: Math.random() * 360,
+    rotationSpeed: (Math.random() - 0.5) * 12
+  };
+}
+
+/* HERO BURST FROM CARD */
+function burstFromCard() {
+  const card = document.getElementById("card").getBoundingClientRect();
+
+  for (let i = 0; i < 320; i++) {
+    particles.push(
+      createParticle(
+        card.left + card.width / 2,
+        card.top + card.height / 2,
+        1.2
+      )
+    );
+  }
+}
+
+/* BACKGROUND CRACKERS */
+function backgroundBurst() {
+  const x = Math.random() * canvas.width;
+  const y = Math.random() * canvas.height * 0.6;
+  for (let i = 0; i < 80; i++) {
+    particles.push(createParticle(x, y, 0.7));
+  }
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  particles.forEach(p => {
+    ctx.save();
+    ctx.globalAlpha = p.life;
+    ctx.translate(p.x, p.y);
+    ctx.rotate((p.rotation * Math.PI) / 180);
+    ctx.fillStyle = p.color;
+    ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+    ctx.restore();
+
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.3;
+    p.rotation += p.rotationSpeed;
+    p.life -= 0.01;
+  });
+
+  for (let i = particles.length - 1; i >= 0; i--) {
+    if (particles[i].life <= 0) particles.splice(i, 1);
+  }
+
+  if (particles.length > 0) requestAnimationFrame(animate);
+}
+
+let bgInterval;
+
+/* START FULL CELEBRATION */
+function startConfetti() {
+  burstFromCard();
+  animate();
+
+  let bursts = 0;
+  bgInterval = setInterval(() => {
+    backgroundBurst();
+    bursts++;
+    if (bursts > 10) clearInterval(bgInterval);
+  }, 500);
+}
+</script>
+
+
 /* ---------------- BUTTON LOGIC ---------------- */
 const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
