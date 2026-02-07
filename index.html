@@ -216,6 +216,79 @@
       startConfetti();
     });
   </script>
+<script>
+  /* ---------- SAFE NO-BUTTON MOVEMENT ---------- */
 
+  const noBtn = document.getElementById("noBtn");
+  const yesBtn = document.getElementById("yesBtn");
+  const area = document.getElementById("btnArea");
+
+  const texts = [
+    "Are you sure? 🤨",
+    "Think again 😏",
+    "Really? 🥺",
+    "Last chance 😳",
+    "Don’t do this 💔",
+    "You’ll regret this 😬",
+    "Still no? 😶",
+    "Come onnn 😩",
+    "Okay… final time 😔"
+  ];
+
+  let noCount = 0;
+
+  function isOverlapping(rect1, rect2) {
+    return !(
+      rect1.right < rect2.left ||
+      rect1.left > rect2.right ||
+      rect1.bottom < rect2.top ||
+      rect1.top > rect2.bottom
+    );
+  }
+
+  noBtn.addEventListener("click", () => {
+    noCount++;
+
+    if (noCount >= texts.length) {
+      noBtn.innerText = "Yes ❤️";
+      noBtn.style.top = "0";
+      noBtn.style.left = "50%";
+      noBtn.style.transform = "translateX(-50%)";
+      noBtn.onclick = () => yesBtn.click();
+      return;
+    }
+
+    noBtn.innerText = texts[noCount];
+
+    const areaRect = area.getBoundingClientRect();
+    const yesRect = yesBtn.getBoundingClientRect();
+
+    let x, y, attempts = 0;
+
+    do {
+      const btnRect = noBtn.getBoundingClientRect();
+      x = Math.random() * (areaRect.width - btnRect.width);
+      y = Math.random() * (areaRect.height - btnRect.height);
+
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+
+      attempts++;
+    } while (
+      isOverlapping(noBtn.getBoundingClientRect(), yesRect) &&
+      attempts < 20
+    );
+  });
+
+  /* ---------- YES BUTTON ---------- */
+
+  yesBtn.addEventListener("click", () => {
+    document.getElementById("card").innerHTML = `
+      <h1>YAY 💘</h1>
+      <p>Officially my Valentine ❤️<br>Best decision ever 😌</p>
+    `;
+    startConfetti();
+  });
+</script>
 </body>
 </html>
