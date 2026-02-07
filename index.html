@@ -124,26 +124,6 @@
   </audio>
 
   <script>
-    const yesBtn = document.getElementById("yesBtn");
-    const noBtn = document.getElementById("noBtn");
-    const message = document.getElementById("message");
-    const audio = document.getElementById("loveAudio");
-
-    yesBtn.addEventListener("click", () => {
-      message.style.display = "block";
-      audio.play();
-      yesBtn.disabled = true;
-      noBtn.disabled = true;
-    });
-
-    noBtn.addEventListener("mouseover", () => {
-      const x = Math.random() * 200 - 100;
-      const y = Math.random() * 100 - 50;
-      noBtn.style.transform = `translate(${x}px, ${y}px)`;
-    });
-  </script>
-
-  <script>
   const yesBtn = document.getElementById("yesBtn");
   const noBtn = document.getElementById("noBtn");
   const card = document.querySelector(".card");
