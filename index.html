@@ -3,99 +3,72 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Will You Be My Valentine, Tono?</title>
+  <title>Will You Be My Valentine? 💘</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-    }
-
     body {
       margin: 0;
       height: 100vh;
       background: linear-gradient(135deg, #ff9a9e, #fad0c4);
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
+      font-family: "Poppins", sans-serif;
+      overflow: hidden;
     }
 
     .card {
-      background: #fff;
+      background: white;
+      padding: 30px;
       border-radius: 20px;
-      padding: 30px 20px;
-      width: 90%;
-      max-width: 360px;
       text-align: center;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-      animation: fadeIn 1s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .heart {
-      font-size: 60px;
-      animation: beat 1.2s infinite;
-    }
-
-    @keyframes beat {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.15); }
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      max-width: 320px;
+      width: 90%;
+      position: relative;
     }
 
     h1 {
-      margin: 10px 0 5px;
       color: #ff4d6d;
-      font-size: 28px;
+      margin-bottom: 10px;
     }
 
     p {
-      margin: 5px 0 20px;
-      color: #444;
-      font-size: 18px;
+      color: #555;
+      margin-bottom: 20px;
     }
 
     .buttons {
       display: flex;
       justify-content: center;
       gap: 15px;
-      position: relative;
     }
 
     button {
+      padding: 10px 22px;
+      border-radius: 25px;
       border: none;
-      padding: 12px 22px;
       font-size: 16px;
-      border-radius: 30px;
       cursor: pointer;
       transition: all 0.3s ease;
     }
 
     #yesBtn {
       background: #ff4d6d;
-      color: #fff;
-      box-shadow: 0 6px 15px rgba(255,77,109,0.4);
-    }
-
-    #yesBtn:hover {
-      transform: scale(1.1);
+      color: white;
     }
 
     #noBtn {
-      background: #ffe3ea;
-      color: #ff4d6d;
+      background: #ddd;
+      color: #333;
       position: relative;
     }
 
-    .message {
-      margin-top: 20px;
-      font-size: 20px;
-      color: #ff4d6d;
-      display: none;
-      animation: fadeIn 1s ease;
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
     }
   </style>
 </head>
@@ -103,93 +76,118 @@
 <body>
 
   <div class="card">
-    <div class="heart">❤️</div>
-    <h1>Tono❤️</h1>
+    <h1>Hey Tvananya 💖</h1>
     <p>Will you be my Valentine?</p>
 
     <div class="buttons">
-      <button id="yesBtn">Yes ✨</button>
-      <button id="noBtn">No 🙄</button>
-    </div>
-
-    <div class="message" id="message">
-      Yayyy!!!💖  
-      You just made my life❤️
+      <button id="yesBtn">Yes ❤️</button>
+      <button id="noBtn">No 💔</button>
     </div>
   </div>
 
-  <!-- Audio plays ONLY after clicking Yes -->
-  <audio id="loveAudio" preload="auto">
-    <source src="https://cdn.pixabay.com/audio/2022/10/30/audio_4c5f2d1c8f.mp3" type="audio/mpeg">
-  </audio>
+  <canvas id="confetti"></canvas>
 
   <script>
-  const yesBtn = document.getElementById("yesBtn");
-  const noBtn = document.getElementById("noBtn");
-  const card = document.querySelector(".card");
-  const audio = document.getElementById("loveAudio");
+    /* ------------------ CONFETTI ------------------ */
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d");
 
-  yesBtn.addEventListener("click", () => {
-    // disable buttons
-    yesBtn.style.display = "none";
-    noBtn.style.display = "none";
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-    // fade out card
-    card.style.transition = "opacity 1s ease, transform 1s ease";
-    card.style.opacity = "0";
-    card.style.transform = "scale(0.95)";
+    const confettiPieces = [];
 
-    // play music after interaction
-    audio.volume = 0.6;
-    audio.play();
+    function createConfetti() {
+      for (let i = 0; i < 150; i++) {
+        confettiPieces.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          r: Math.random() * 6 + 4,
+          d: Math.random() * 20 + 10,
+          color: `hsl(${Math.random() * 360}, 100%, 60%)`,
+          tilt: Math.random() * 10 - 5,
+        });
+      }
+    }
 
-    // after fade, show romantic scene
-    setTimeout(() => {
-      document.body.innerHTML = `
-        <div style="
-          height:100vh;
-          display:flex;
-          flex-direction:column;
-          justify-content:center;
-          align-items:center;
-          background: radial-gradient(circle at top, #ffd1dc, #ff8fab);
-          color:#fff;
-          text-align:center;
-          animation: fadeIn 2s ease;
-          font-family: 'Poppins', system-ui, sans-serif;
-        ">
-          <div style="font-size:80px; animation: pulse 1.5s infinite;">❤️</div>
-          <div style="font-size:22px; margin-top:20px; opacity:0; animation: appear 2s ease forwards 1s;">
-            Yayyy… 💕
-          </div>
-          <div style="font-size:18px; margin-top:12px; opacity:0; animation: appear 2s ease forwards 2.5s;">
-            Who's the luckiest?
-          </div>
-          <div style="font-size:18px; margin-top:8px; opacity:0; animation: appear 2s ease forwards 4s;">
-            Yes, that's me!
-          </div>
-          <div style="font-size:20px; margin-top:30px; opacity:0; animation: appear 2s ease forwards 5.5s;">
-            I love you, Tono❤️
-          </div>
-        </div>
+    function drawConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      confettiPieces.forEach(p => {
+        ctx.beginPath();
+        ctx.fillStyle = p.color;
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      updateConfetti();
+    }
 
-        <style>
-          @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-          }
-          @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.15); }
-          }
-          @keyframes appear {
-            to { opacity: 1; }
-          }
-        </style>
+    function updateConfetti() {
+      confettiPieces.forEach(p => {
+        p.y += Math.cos(p.d) + 3;
+        p.x += Math.sin(p.d);
+        if (p.y > canvas.height) {
+          p.y = -10;
+          p.x = Math.random() * canvas.width;
+        }
+      });
+    }
+
+    function startConfetti() {
+      createConfetti();
+      setInterval(drawConfetti, 20);
+    }
+
+    /* ------------------ BUTTON LOGIC ------------------ */
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+
+    let noClicks = 0;
+
+    const texts = [
+      "Are you sure? 🤨",
+      "Think again 😏",
+      "Really? 🥺",
+      "Last chance 😳",
+      "Don’t do this 💔",
+      "You’ll regret this 😬",
+      "Still no? 😶",
+      "Come onnn 😩",
+      "Okay… final time 😔"
+    ];
+
+    noBtn.addEventListener("click", () => {
+      noClicks++;
+
+      if (noClicks >= texts.length) {
+        noBtn.innerText = "Yes ❤️";
+        noBtn.style.position = "static";
+        noBtn.onclick = () => yesBtn.click();
+        return;
+      }
+
+      noBtn.innerText = texts[noClicks];
+
+      const maxX = window.innerWidth - noBtn.offsetWidth;
+      const maxY = window.innerHeight - noBtn.offsetHeight;
+
+      noBtn.style.position = "absolute";
+      noBtn.style.left = Math.random() * maxX + "px";
+      noBtn.style.top = Math.random() * maxY + "px";
+    });
+
+    yesBtn.addEventListener("click", () => {
+      document.querySelector(".card").innerHTML = `
+        <h1>YAYYYY 💘</h1>
+        <p>I knew you’d say yes 😍<br>Happy Valentine’s Day ❤️</p>
       `;
-    }, 1200);
-  });
-</script>
+      startConfetti();
+    });
+
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
 
 </body>
 </html>
